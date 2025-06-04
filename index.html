@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sea Tori — Кафе и суши-бар</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<header class="header">
+    <div class="container">
+        <div class="logo">Sea Tori</div>
+        <nav class="nav" id="main-nav">
+            <a href="menu.html">Меню</a>
+            <a href="cart.html">Корзина</a>
+            <a href="profile.html" id="profile-link">Профиль</a>
+        </nav>
+        <div class="burger" id="burger-menu">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+</header>
+<main class="main fadein-hero">
+    <section class="hero">
+        <h1>Добро пожаловать в <span class="accent">Sea Tori</span> <span style="font-size:2.2rem;">🍣🍥</span></h1>
+
+    </section>
+    <section class="about-cafe fadein-hero">
+        <div class="container">
+            <h2>О нас</h2>
+            <p>Sea Tori — это современное кафе, где сочетаются лучшие традиции японской кухни и уютная атмосфера для встреч, работы и отдыха. Мы готовим только из свежих ингредиентов и заботимся о каждом госте!</p>
+        </div>
+    </section>
+    <div class="btn-center" style="margin-top: 18px; margin-bottom: 32px;">
+        <a href="menu.html" class="btn btn-primary">Посмотреть меню</a>
+    </div>
+    <section class="features modern-features">
+      <div class="feature-card big-feature">
+        <div class="feature-icon" style="font-size:2.5rem;">🍣</div>
+        <div class="feature-title">Свежие суши и роллы</div>
+        <div class="feature-desc">Только лучшие ингредиенты и классические рецепты.</div>
+      </div>
+      <div class="feature-card big-feature">
+        <div class="feature-icon" style="font-size:2.5rem;">☕</div>
+        <div class="feature-title">Ароматный кофе</div>
+        <div class="feature-desc">Авторские напитки и классика для ценителей вкуса.</div>
+      </div>
+      <div class="feature-card big-feature">
+        <div class="feature-icon" style="font-size:2.5rem;">🚚</div>
+        <div class="feature-title">Быстрая доставка</div>
+        <div class="feature-desc">Доставим ваш заказ за 60 минут или быстрее.</div>
+      </div>
+      <div class="feature-card big-feature">
+        <div class="feature-icon" style="font-size:2.5rem;">📱</div>
+        <div class="feature-title">Удобно с телефона</div>
+        <div class="feature-desc">Полная адаптация под мобильные устройства.</div>
+      </div>
+    </section>
+</main>
+<footer class="footer new-footer">
+    <div class="container">
+      <div class="footer-main">
+        <div class="footer-logo-block">
+          <div class="footer-logo">Sea Tori <span style='font-size:1.3em;'>🍣</span></div>
+          <div class="footer-desc">Кафе и суши-бар в японском стиле.<br>Свежие блюда, уютная атмосфера.</div>
+        </div>
+        <div class="footer-contacts-block">
+          <div class="footer-contacts-title">Контакты</div>
+          <div class="footer-contacts-list">
+            <span>+7 962 376 0505</span>
+            <span>seatori@mail.ru</span>
+            <span>г. Дербент, ул, эмиргамзаева 42б/1 </span>
+            <span>Пн-Вс: 11:00–23:00</span>
+          </div>
+        </div>
+        <div class="footer-socials-block">
+          <div class="footer-contacts-title">Мы в соцсетях</div>
+          <div class="footer-socials">
+            <a href="https://t.me/sea_tori" aria-label="Telegram" target="_blank"><img src="img/telegram.svg" alt="Telegram" class="footer-icon"></a>
+            <a href="https://instagram.com/sea_tori" aria-label="Instagram" target="_blank"><img src="img/instagram.svg" alt="Instagram" class="footer-icon"></a>
+            <a href="https://vk.com/sea_tori" aria-label="VK" target="_blank"><img src="img/vk.svg" alt="VK" class="footer-icon"></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2025 Sea Tori. Все права защищены.</span>
+        <span>Сделано с любовью к Японии <span style='font-size:1.1em;'>⛩️</span></span>
+      </div>
+    </div>
+</footer>
+<div id="toast" class="toast"></div>
+<div id="menu-import-error" style="color:#e64b4b;text-align:center;margin:18px 0;display:none;">
+  Не удалось импортировать меню из menu.html. <button id="import-menu-btn" class="btn btn-secondary">Импортировать из menu.html</button>
+</div>
+<div id="menu-add-btn-wrap" style="text-align:center;margin:18px 0;display:none;">
+  <button id="add-menu-item-btn" class="btn btn-primary">Добавить товар</button>
+</div>
+<script src="js/main.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // ... фильтрация по категориям ...
+
+  document.querySelectorAll('.menu-item-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const card = this.closest('.menu-item-card');
+      const name = card.querySelector('.menu-item-title').textContent;
+      // Найти товар в DB.getMenu() по имени
+      const menu = window.DB ? DB.getMenu() : [];
+      const item = menu.find(i => i.name === name);
+      if (!item) return;
+      let cart = DB.getCart();
+      const idx = cart.findIndex(i => i.id === item.id);
+      if (idx > -1) {
+        cart[idx].count = (cart[idx].count || 1) + 1;
+      } else {
+        cart.push({ ...item, count: 1 });
+      }
+      DB.setCart(cart);
+      // Показать уведомление
+      let toast = document.getElementById('toast');
+      if (toast) {
+        toast.textContent = 'Добавлено в корзину!';
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3200);
+      }
+    });
+  });
+
+  document.getElementById('import-menu-btn')?.addEventListener('click', function() {
+    importMenuFromHTML(true);
+  });
+
+  document.getElementById('add-menu-item-btn')?.addEventListener('click', function() {
+    const menu = getMenu();
+    const newItem = { id: 'new_'+Date.now(), name: 'Новое блюдо', cat: adminMenuCat, desc: '', price: 0, img: '' };
+    menu.push(newItem);
+    setMenu(menu);
+    renderAdminMenuCards();
+  });
+});
+
+function importMenuFromHTML(force) {
+  if (getMenu().length && !force) return;
+  const html = document.createElement('div');
+  fetch('menu.html').then(r=>r.text()).then(txt => {
+    html.innerHTML = txt;
+    const cards = html.querySelectorAll('.menu-item-card');
+    const menu = [];
+    cards.forEach(card => {
+      const name = card.querySelector('.menu-item-title')?.textContent?.trim() || '';
+      const cat = card.getAttribute('data-cat') || '';
+      const desc = card.querySelector('.menu-item-desc')?.textContent?.trim() || '';
+      const priceRaw = card.querySelector('.menu-item-price')?.textContent?.replace(/[^\d]/g,'') || '0';
+      const price = parseInt(priceRaw) || 0;
+      const img = card.querySelector('img')?.getAttribute('src') || '';
+      if (name && cat) menu.push({ id: name+'_'+price, name, cat, desc, price, img });
+    });
+    setMenu(menu);
+    renderAdminMenuCats();
+    renderAdminMenuCards();
+    document.getElementById('menu-import-error').style.display = 'none';
+  }).catch(() => {
+    document.getElementById('menu-import-error').style.display = '';
+  });
+}
+
+function renderAdminMenuCards() {
+  const menu = getMenu();
+  const cardsWrap = document.getElementById('admin-menu-cards');
+  const empty = document.getElementById('menu-empty');
+  const addBtnWrap = document.getElementById('menu-add-btn-wrap');
+  const filtered = menu.filter(i=>i.cat===adminMenuCat);
+  cardsWrap.innerHTML = '';
+  if (!filtered.length) {
+    empty.style.display = '';
+    addBtnWrap.style.display = '';
+    return;
+  } else {
+    empty.style.display = 'none';
+    addBtnWrap.style.display = 'none';
+  }
+  // ... остальной код ...
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Профиль — Sea Tori</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<header class="header">
+  <div class="container">
+    <div class="logo">Sea Tori</div>
+    <nav class="nav" id="main-nav">
+      <a href="index.html">Главная</a>
+      <a href="menu.html">Меню</a>
+      <a href="cart.html">Корзина</a>
+      <a href="profile.html" class="active" id="profile-link">Профиль</a>
+    </nav>
+    <div class="burger" id="burger-menu">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</header>
+<main class="main">
+  <h2 class="page-title">Профиль</h2>
+  <form class="profile-info" id="profile-form">
+    <div class="form-group">
+      <label for="profile-name">Имя</label>
+      <input type="text" id="profile-name" name="name" required>
+    </div>
+    <div class="form-group">
+      <label for="profile-phone">Телефон</label>
+      <input type="tel" id="profile-phone" name="phone" required>
+    </div>
+    <div class="form-group">
+      <label for="profile-address">Адрес доставки</label>
+      <input type="text" id="profile-address" name="address" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+  </form>
+  <div class="order-history" id="order-history">
+    <h3>История заказов</h3>
+    <!-- История заказов -->
+  </div>
+  <button class="btn btn-secondary" id="logout-btn">Выйти</button>
+  <div id="admin-panel-btn-wrap"></div>
+</main>
+<footer class="footer new-footer">
+  <div class="container">
+    <div class="footer-main">
+      <div class="footer-logo-block">
+        <div class="footer-logo">Sea Tori <span style='font-size:1.3em;'>🍣</span></div>
+        <div class="footer-desc">Кафе и суши-бар в японском стиле.<br>Свежие блюда, уютная атмосфера.</div>
+      </div>
+      <div class="footer-contacts-block">
+        <div class="footer-contacts-title">Контакты</div>
+        <div class="footer-contacts-list">
+          <span>+7 999 888 77 66</span>
+          <span>seatori@mail.ru</span>
+          <span>г. Москва, ул. Японская, 7</span>
+          <span>Пн-Вс: 11:00–23:00</span>
+        </div>
+      </div>
+      <div class="footer-socials-block">
+        <div class="footer-contacts-title">Мы в соцсетях</div>
+        <div class="footer-socials">
+          <a href="https://t.me/sea_tori" aria-label="Telegram" target="_blank"><img src="img/telegram.svg" alt="Telegram" class="footer-icon"></a>
+          <a href="https://instagram.com/sea_tori" aria-label="Instagram" target="_blank"><img src="img/instagram.svg" alt="Instagram" class="footer-icon"></a>
+          <a href="https://vk.com/sea_tori" aria-label="VK" target="_blank"><img src="img/vk.svg" alt="VK" class="footer-icon"></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2024 Sea Tori. Все права защищены.</span>
+      <span>Сделано с любовью к Японии <span style='font-size:1.1em;'>⛩️</span></span>
+    </div>
+  </div>
+</footer>
+<script>
+  if (!localStorage.getItem('currentUser')) window.location.href = 'login.html';
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+      logoutBtn.onclick = function() {
+        localStorage.removeItem('currentUser');
+        window.location.href = 'login.html';
+      };
+    }
+    // История заказов пользователя
+    function getOrders() {
+      try { return JSON.parse(localStorage.getItem('orders')||'[]'); } catch(e){ return []; }
+    }
+    function renderUserOrders() {
+      const user = JSON.parse(localStorage.getItem('currentUser')||'null');
+      if (!user) return;
+      const orders = getOrders();
+      // Сравниваем по телефону или логину (строго, без лишних пробелов)
+      const userPhone = (user.phone||'').replace(/\D/g,'');
+      const userLogin = (user.login||'').trim();
+      const userOrders = orders.filter(o => {
+        const oPhone = (o.phone||'').replace(/\D/g,'');
+        const oLogin = (o.login||'').trim();
+        return (userPhone && oPhone && oPhone === userPhone) || (userLogin && oLogin && oLogin === userLogin);
+      });
+      const wrap = document.getElementById('order-history');
+      let html = '<h3>История заказов</h3>';
+      if (!userOrders.length) {
+        html += '<div style="color:#bbb;text-align:center;margin:18px 0;">У вас пока нет заказов (user: '+JSON.stringify(user)+')</div>';
+      } else {
+        userOrders.sort((a,b)=>b.date.localeCompare(a.date));
+        html += '<div style="display:flex;flex-direction:column;gap:18px;">';
+        userOrders.forEach(order => {
+          const status = order.status||'Новый';
+          const statusColor = status==='Выполнено' ? '#b80000' : '#1a7a1a';
+          const statusBg = status==='Выполнено' ? '#ffd6d6' : '#d4f7d4';
+          html += `<div style="background:#fff;border-radius:14px;box-shadow:0 2px 10px #0001;padding:16px 14px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+              <span style="font-size:1.08em;font-weight:600;">${order.date ? order.date.replace('T',' ').slice(0,16) : ''}</span>
+              <span style="padding:4px 14px;border-radius:8px;font-weight:700;background:${statusBg};color:${statusColor};">${status}</span>
+            </div>
+            <div style="font-size:1em;margin-bottom:6px;">${(order.items||[]).map(i=>`${i.name} x${i.count||1}`).join(', ')}</div>
+            <div style="font-size:1.08em;font-weight:600;">Сумма: ${order.total} ₽</div>
+          </div>`;
+        });
+        html += '</div>';
+      }
+      wrap.innerHTML = html;
+    }
+    renderUserOrders();
+  });
+</script>
+<script src="js/profile.js"></script>
+</body>
+</html> 

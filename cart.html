@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Корзина — Sea Tori</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="logo">Sea Tori</div>
+      <nav class="nav" id="main-nav">
+        <a href="index.html">Главная</a>
+        <a href="menu.html">Меню</a>
+        <a href="cart.html" class="active">Корзина</a>
+        <a href="profile.html" id="profile-link">Профиль</a>
+      </nav>
+      <div class="burger" id="burger-menu">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </header>
+  <main class="main">
+    <h2 class="page-title">Ваша корзина</h2>
+    <section class="cart-items" id="cart-items">
+      <!-- Список товаров в корзине -->
+    </section>
+    <div class="btn-center" style="margin-bottom:18px;">
+
+    </div>
+    <section class="cart-summary">
+      <div class="cart-total">Итого: <span id="cart-total">0 ₽</span></div>
+      <button id="go-to-order" class="btn btn-primary">Оформить заказ</button>
+    </section>
+  </main>
+  <footer class="footer new-footer">
+    <div class="container">
+      <div class="footer-main">
+        <div class="footer-logo-block">
+          <div class="footer-logo">Sea Tori <span style='font-size:1.3em;'>🍣</span></div>
+          <div class="footer-desc">Кафе и суши-бар в японском стиле.<br>Свежие блюда, уютная атмосфера.</div>
+        </div>
+        <div class="footer-contacts-block">
+          <div class="footer-contacts-title">Контакты</div>
+          <div class="footer-contacts-list">
+            <span>+7 999 888 77 66</span>
+            <span>seatori@mail.ru</span>
+            <span>г. Москва, ул. Японская, 7</span>
+            <span>Пн-Вс: 11:00–23:00</span>
+          </div>
+        </div>
+        <div class="footer-socials-block">
+          <div class="footer-contacts-title">Мы в соцсетях</div>
+          <div class="footer-socials">
+            <a href="https://t.me/sea_tori" aria-label="Telegram" target="_blank"><img src="img/telegram.svg" alt="Telegram" class="footer-icon"></a>
+            <a href="https://instagram.com/sea_tori" aria-label="Instagram" target="_blank"><img src="img/instagram.svg" alt="Instagram" class="footer-icon"></a>
+            <a href="https://vk.com/sea_tori" aria-label="VK" target="_blank"><img src="img/vk.svg" alt="VK" class="footer-icon"></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2024 Sea Tori. Все права защищены.</span>
+        <span>Сделано с любовью к Японии <span style='font-size:1.1em;'>⛩️</span></span>
+      </div>
+    </div>
+  </footer>
+  <div id="toast" class="toast"></div>
+  <script>
+    if (!localStorage.getItem('currentUser')) window.location.href = 'login.html';
+
+    // Простые функции для работы с корзиной
+    function getCart() {
+      try {
+        return JSON.parse(localStorage.getItem('cart') || '[]');
+      } catch (e) { return []; }
+    }
+    function setCart(cart) {
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+    function getDelivery() {
+      try {
+        return JSON.parse(localStorage.getItem('delivery') || 'null');
+      } catch (e) { return null; }
+    }
+    function renderCart() {
+      const cart = getCart();
+      const delivery = getDelivery();
+      const itemsWrap = document.getElementById('cart-items');
+      const totalWrap = document.getElementById('cart-total');
+      itemsWrap.innerHTML = '';
+      let total = 0;
+      if (cart.length === 0) {
+        itemsWrap.innerHTML = '<div style="text-align:center;color:#bbb;font-size:1.2em;margin:32px 0;">Корзина пуста</div>';
+        totalWrap.textContent = '0 ₽';
+        return;
+      }
+      cart.forEach(item => {
+        total += (item.price * (item.count || 1));
+        const el = document.createElement('div');
+        el.className = 'cart-item';
+        el.innerHTML = `
+          <div style="display:flex;align-items:center;gap:14px;">
+            ${item.img ? `<img src="${item.img}" alt="${item.name}" style="width:54px;height:54px;object-fit:cover;border-radius:12px;">` : ''}
+            <div>
+              <div class="cart-item-title">${item.name}</div>
+              <div style="color:#bbb;font-size:0.98em;">${item.desc || ''}</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:end;gap:6px;">
+            <div class="cart-item-price">${item.price} ₽ × ${item.count || 1}</div>
+            <button class="cart-item-remove" title="Удалить из корзины">✕</button>
+          </div>
+        `;
+        el.querySelector('.cart-item-remove').onclick = () => {
+          const cartNow = getCart();
+          const idx = cartNow.findIndex(i => i.id === item.id);
+          if (idx > -1) {
+            cartNow.splice(idx, 1);
+            setCart(cartNow);
+            renderCart();
+          }
+        };
+        itemsWrap.appendChild(el);
+      });
+      // Доставка
+      let deliveryBlock = document.createElement('div');
+      deliveryBlock.className = 'cart-item';
+      if (delivery) {
+        deliveryBlock.innerHTML = `<div class="cart-item-title">Доставка: <b>${delivery.name}</b></div><div class="cart-item-price">${delivery.price} ₽</div>`;
+        total += delivery.price;
+      } else {
+        deliveryBlock.innerHTML = `<div class="cart-item-title" style="color:#e64b4b;">Выберите доставку в меню!</div><div class="cart-item-price">0 ₽</div>`;
+      }
+      itemsWrap.appendChild(deliveryBlock);
+      totalWrap.textContent = total + ' ₽';
+    }
+    document.addEventListener('DOMContentLoaded', renderCart);
+    // Перейти к оформлению заказа
+    document.getElementById('go-to-order').onclick = function(e) {
+      e.preventDefault();
+      window.location.href = 'order.html';
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Регистрация — Sea Tori</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<header class="main-header">
+  <a href="index.html" class="logo">Sea Tori</a>
+</header>
+<main class="main">
+  <form id="register-form" class="form-modern">
+    <h2 style="text-align:center;margin-bottom:32px;">Регистрация</h2>
+    <div class="form-group">
+      <label for="phone">Телефон</label>
+      <input type="tel" id="phone" required placeholder="+7 900 000 0000" autocomplete="username" maxlength="16" autofocus />
+      <small style="color:#888;">Формат: +7 900 000 0000</small>
+    </div>
+    <div class="form-group">
+      <label for="password">Пароль</label>
+      <input type="password" id="password" required autocomplete="new-password" />
+    </div>
+    <div id="register-error" style="color:#c00;text-align:center;display:none;margin-bottom:12px;">Этот номер уже зарегистрирован</div>
+    <button type="submit" class="btn" style="width:100%;margin-top:10px;">Зарегистрироваться</button>
+    <div style="text-align:center;margin-top:18px;">
+      Уже есть аккаунт? <a href="login.html">Войти</a>
+    </div>
+  </form>
+</main>
+<footer class="footer new-footer">
+</footer>
+<script src="js/main.js"></script>
+<script src="js/login.js"></script>
+<script>
+const phoneInput = document.getElementById('phone');
+phoneInput.addEventListener('input', function() {
+  let v = this.value.replace(/[^\d+]/g, '');
+  if (v[0] !== '+') v = '+7' + v.replace(/^\+?7?/, '');
+  this.value = v.slice(0,16);
+});
+document.getElementById('register-form').onsubmit = function(e) {
+  e.preventDefault();
+  const phone = document.getElementById('phone').value.trim();
+  const pass = document.getElementById('password').value;
+  const ok = window.register(phone, pass);
+  if (ok) {
+    window.updateHeaderUI();
+    window.location.href = 'profile.html';
+  } else {
+    document.getElementById('register-error').style.display = 'block';
+  }
+};
+</script>
+<script src="js/menu.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/order.js"></script>
+<script src="js/admin.js"></script>
+<script src="js/profile.js"></script>
+</body>
+</html> 

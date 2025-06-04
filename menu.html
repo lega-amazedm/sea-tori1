@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Меню — Sea Tori</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+  <div class="logo">Sea Tori</div>
+      <nav class="nav" id="main-nav">
+    <a href="index.html">Главная</a>
+    <a href="menu.html" class="active">Меню</a>
+    <a href="cart.html">Корзина</a>
+        <a href="profile.html" id="profile-link">Профиль</a>
+  </nav>
+      <div class="burger" id="burger-menu">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+</header>
+  <main class="main">
+    <h2 class="page-title">Меню</h2>
+    <section class="menu-categories">
+      <button class="category-btn active" data-category="all">Все</button>
+      <button class="category-btn" data-category="sushi">Суши</button>
+      <button class="category-btn" data-category="rolls">Роллы</button>
+      <button class="category-btn" data-category="sets">Сеты</button>
+      <button class="category-btn" data-category="soups">Супы</button>
+      <button class="category-btn" data-category="snacks">Закуски</button>
+      <button class="category-btn" data-category="drinks">Напитки</button>
+      <button class="category-btn" data-category="desserts">Десерты</button>
+      <button class="category-btn" data-category="delivery">Доставка</button>
+    </section>
+    <section class="menu-items" id="menu-items">
+      <!-- Суши -->
+      <div class="menu-item-card" data-cat="sushi">
+        <div class="menu-item-img-wrap"><img src="img/menu/salmon_sushi.jpg" alt="Суши с лососем" class="menu-item-img"></div>
+        <div class="menu-item-title">Суши с лососем</div>
+        <div class="menu-item-desc">Рис, лосось, нори</div>
+        <div class="menu-item-price">120</div>
+        <button class="btn menu-item-btn">В корзину</button>
+      </div>
+      <div class="menu-item-card" data-cat="sushi">
+        <div class="menu-item-img-wrap"><img src="img/menu/tuna_sushi.jpg" alt="Суши с тунцом" class="menu-item-img"></div>
+        <div class="menu-item-title">Суши с тунцом</div>
+        <div class="menu-item-desc">Рис, тунец, нори</div>
+        <div class="menu-item-price">130</div>
+        <button class="btn menu-item-btn">В корзину</button>
+      </div>
+      <div class="menu-item-card" data-cat="sushi">
+        <div class="menu-item-img-wrap"><img src="img/menu/shrimp_sushi.jpg" alt="Суши с креветкой" class="menu-item-img"></div>
+        <div class="menu-item-title">Суши с креветкой</div>
+        <div class="menu-item-desc">Рис, креветка, нори</div>
+        <div class="menu-item-price">140</div>
+        <button class="btn menu-item-btn">В корзину</button>
+      </div>
+      <!-- Роллы -->
+      <div class="menu-item-card" data-cat="rolls">
+        <div class="menu-item-img-wrap"><img src="img/menu/philadelphia_roll.jpg" alt="Филадельфия" class="menu-item-img"></div>
+        <div class="menu-item-title">Филадельфия</div>
+        <div class="menu-item-desc">Лосось, сыр, огурец</div>
+        <div class="menu-item-price">350</div>
+        <button class="btn menu-item-btn">В корзину</button>
+      </div>
+      <div class="menu-item-card" data-cat="rolls">
+        <div class="menu-item-img-wrap"><img src="img/menu/california_roll.jpg" alt="Калифорния" class="menu-item-img"></div>
+        <div class="menu-item-title">Калифорния</div>
+        <div class="menu-item-desc">Краб, авокадо, огурец</div>
+        <div class="menu-item-price">320</div>
+        <button class="btn menu-item-btn">В корзину</button>
+      </div>
+      <div class="menu-item-card" data-cat="rolls">
+        <div class="menu-item-img-wrap"><img src="img/menu/dragon_roll.jpg" alt="Дракон" class="menu-item-img"></div>
+        <div class="menu-item-title">Дракон</div>
+        <div class="menu-item-desc">Угорь, авокадо, соус унаги</div>
+        <div class="menu-item-price">400</div>
+        <button class="btn menu-item-btn">В корзину</button>
+      </div>
+      <!-- Сеты -->
+      <div class="menu-item-card" data-cat="sets">
+        <div class="menu-item-img-wrap"><img src="img/menu/mega_set.jpg" alt="Сет 'Мега суши'" class="menu-item-img"></div>
+        <div class="menu-item-title">Сет "Мега суши"</div>
+        <div class="menu-item-desc">20 суши, 4 ролла, имбирь, васаби</div>
+        <div class="menu-item-price">1200</div>
+        <button class="btn menu-item-btn">В корзину</button>
+      </div>
+      <div class="menu-item-card" data-cat="sets">
+        <div class="menu-item-img-wrap"><img src="img/menu/japan_set.jpg" alt="Сет 'Япония'" class="menu-item-img"></div>
+        <div class="menu-item-title">Сет "Япония"</div>
+        <div class="menu-item-desc">3 ролла, 6 суши, напиток</div>
+        <div class="menu-item-price">950</div>
+        <button class="btn menu-item-btn">В корзину</button>
+      </div>
+      <!-- Супы -->
+      <div class="menu-item-card" data-cat="soups">
+        <div class="menu-item-img-wrap"><img src="img/menu/miso_soup.jpg" alt="Мисо суп" class="menu-item-img"></div>
+        <div class="menu-item-title">Мисо суп</div>
+        <div class="menu-item-desc">Тофу, водоросли, мисо-паста</div>
+        <div class="menu-item-price">180</div>
+        <button class="btn menu-item-btn">В корзину</button>
+      </div>
+      <div class="menu-item-card" data-cat="soups">
+        <div class="menu-item-img-wrap"><img src="img/menu/salmon_soup.jpg" alt="Суп с лососем" class="menu-item-img"></div>
+        <div class="menu-item-title">Суп с лососем</div>
+        <div class="menu-item-desc">Лосось, рис, овощи</div>
+        <div class="menu-item-price">220</div>
+        <button class="btn menu-item-btn">В корзину</button>
+      </div>
+      <!-- Закуски -->
+      <div class="menu-item-card" data-cat="snacks">
+        <div class="menu-item-img-wrap"><img src="img/menu/gyoza.jpg" alt="Гёдза" class="menu-item-img"></div>
+        <div class="menu-item-title">Гёдза</div>
+        <div class="menu-item-desc">Японские пельмени с мясом</div>
+        <div class="menu-item-price">210</div>
+        <button class="btn menu-item-btn">В корзину</button>
+      </div>
+      <div class="menu-item-card" data-cat="snacks">
+        <div class="menu-item-img-wrap"><img src="img/menu/wakame_salad.jpg" alt="Вакаме салат" class="menu-item-img"></div>
+        <div class="menu-item-title">Вакаме салат</div>
+        <div class="menu-item-desc">Морские водоросли, кунжут</div>
+        <div class="menu-item-price">160</div>
+        <button class="btn menu-item-btn">В корзину</button>
+      </div>
+      <!-- Напитки -->
+      <div class="menu-item-card" data-cat="drinks">
+        <div class="menu-item-img-wrap"><img src="img/menu/green_tea.jpg" alt="Зелёный чай" class="menu-item-img"></div>
+        <div class="menu-item-title">Зелёный чай</div>
+        <div class="menu-item-desc">Японский зелёный чай</div>
+        <div class="menu-item-price">90</div>
+        <button class="btn menu-item-btn">В корзину</button>
+      </div>
+      <div class="menu-item-card" data-cat="drinks">
+        <div class="menu-item-img-wrap"><img src="img/menu/yuzu_lemonade.jpg" alt="Лимонад юдзу" class="menu-item-img"></div>
+        <div class="menu-item-title">Лимонад юдзу</div>
+        <div class="menu-item-desc">Освежающий японский лимонад</div>
+        <div class="menu-item-price">120</div>
+        <button class="btn menu-item-btn">В корзину</button>
+      </div>
+      <!-- Десерты -->
+      <div class="menu-item-card" data-cat="desserts">
+        <div class="menu-item-img-wrap"><img src="img/menu/mochi.jpg" alt="Моти" class="menu-item-img"></div>
+        <div class="menu-item-title">Моти</div>
+        <div class="menu-item-desc">Рисовые пирожные с разными вкусами</div>
+        <div class="menu-item-price">150</div>
+        <button class="btn menu-item-btn">В корзину</button>
+      </div>
+      <div class="menu-item-card" data-cat="desserts">
+        <div class="menu-item-img-wrap"><img src="img/menu/tiramisu.jpg" alt="Тирамису" class="menu-item-img"></div>
+        <div class="menu-item-title">Тирамису</div>
+        <div class="menu-item-desc">Итальянский десерт</div>
+        <div class="menu-item-price">210</div>
+        <button class="btn menu-item-btn">В корзину</button>
+      </div>
+      <!-- Доставка -->
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Авадан" data-delivery-price="300">
+        <div class="menu-item-title">Авадан</div>
+        <div class="menu-item-price">300 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Авадан" data-delivery-price="300">
+        <div class="menu-item-title">Авадан</div>
+        <div class="menu-item-price">300 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Авдин" data-delivery-price="250">
+        <div class="menu-item-title">Авдин</div>
+        <div class="menu-item-price">250 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Араблинка" data-delivery-price="250">
+        <div class="menu-item-title">Араблинка</div>
+        <div class="menu-item-price">250 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Вургуна" data-delivery-price="200">
+        <div class="menu-item-title">Вургуна</div>
+        <div class="menu-item-price">200 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Ахмед Хаджи Акушинского" data-delivery-price="200">
+        <div class="menu-item-title">Ахмед Хаджи Акушинского</div>
+        <div class="menu-item-price">200 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Верхняя Сабнов" data-delivery-price="200">
+        <div class="menu-item-title">Верхняя Сабнов</div>
+        <div class="menu-item-price">200 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Дагестанская" data-delivery-price="150">
+        <div class="menu-item-title">Дагестанская</div>
+        <div class="menu-item-price">150 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="До Арки" data-delivery-price="300">
+        <div class="menu-item-title">До Арки</div>
+        <div class="menu-item-price">300 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Доставка за город" data-delivery-price="200">
+        <div class="menu-item-title">Доставка за город</div>
+        <div class="menu-item-price">200 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Доставка Киргу предгорная" data-delivery-price="150">
+        <div class="menu-item-title">Доставка Киргу предгорная</div>
+        <div class="menu-item-price">150 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Доставка нижний" data-delivery-price="200">
+        <div class="menu-item-title">Доставка нижний</div>
+        <div class="menu-item-price">200 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Доставка по городу" data-delivery-price="150">
+        <div class="menu-item-title">Доставка по городу</div>
+        <div class="menu-item-price">150 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Джапан" data-delivery-price="250">
+        <div class="menu-item-title">Джапан</div>
+        <div class="menu-item-price">250 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Доставка рядом" data-delivery-price="250">
+        <div class="menu-item-title">Доставка рядом</div>
+        <div class="menu-item-price">250 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Доставка хазар" data-delivery-price="250">
+        <div class="menu-item-title">Доставка хазар</div>
+        <div class="menu-item-price">250 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Карьер" data-delivery-price="50">
+        <div class="menu-item-title">Карьер</div>
+        <div class="menu-item-price">50 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="За Арку" data-delivery-price="200">
+        <div class="menu-item-title">За Арку</div>
+        <div class="menu-item-price">200 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Музаим" data-delivery-price="150">
+        <div class="menu-item-title">Музаим</div>
+        <div class="menu-item-price">150 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Нижния сабно" data-delivery-price="400">
+        <div class="menu-item-title">Нижния сабно</div>
+        <div class="menu-item-price">400 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Предгорная" data-delivery-price="200">
+        <div class="menu-item-title">Предгорная</div>
+        <div class="menu-item-price">200 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Прибой от ЦГБ и дальше" data-delivery-price="250">
+        <div class="menu-item-title">Прибой от ЦГБ и дальше</div>
+        <div class="menu-item-price">250 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="сабнова" data-delivery-price="100">
+        <div class="menu-item-title">сабнова</div>
+        <div class="menu-item-price">100 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Доставка шеболдаева" data-delivery-price="150">
+        <div class="menu-item-title">Доставка шеболдаева</div>
+        <div class="menu-item-price">150 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Махачкалинская" data-delivery-price="150">
+        <div class="menu-item-title">Махачкалинская</div>
+        <div class="menu-item-price">150 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Пlepeynox Kapina Маркс" data-delivery-price="100">
+        <div class="menu-item-title">Пlepeynox Kapina Маркс</div>
+        <div class="menu-item-price">100 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Приморская" data-delivery-price="100">
+        <div class="menu-item-title">Приморская</div>
+        <div class="menu-item-price">100 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Сальмона тупик" data-delivery-price="100">
+        <div class="menu-item-title">Сальмона тупик</div>
+        <div class="menu-item-price">100 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Рубас" data-delivery-price="600">
+        <div class="menu-item-title">Рубас</div>
+        <div class="menu-item-price">600 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+      <div class="menu-item-card" data-cat="delivery" data-delivery-name="Хазар" data-delivery-price="300">
+        <div class="menu-item-title">Хазар</div>
+        <div class="menu-item-price">300 руб.</div>
+        <button class="btn menu-item-btn delivery-btn">Выбрать</button>
+      </div>
+    </section>
+    <div class="btn-center">
+      <a href="cart.html" class="btn btn-primary">Перейти в корзину</a>
+    </div>
+  </main>
+  <footer class="footer new-footer">
+    <div class="container">
+      <div class="footer-main">
+        <div class="footer-logo-block">
+          <div class="footer-logo">Sea Tori <span style='font-size:1.3em;'>🍣</span></div>
+          <div class="footer-desc">Кафе и суши-бар в японском стиле.<br>Свежие блюда, уютная атмосфера.</div>
+        </div>
+        <div class="footer-contacts-block">
+          <div class="footer-contacts-title">Контакты</div>
+          <div class="footer-contacts-list">
+            <span>+7 999 888 77 66</span>
+            <span>seatori@mail.ru</span>
+            <span>г. Москва, ул. Японская, 7</span>
+            <span>Пн-Вс: 11:00–23:00</span>
+  </div>
+</div>
+        <div class="footer-socials-block">
+          <div class="footer-contacts-title">Мы в соцсетях</div>
+          <div class="footer-socials">
+            <a href="https://t.me/sea_tori" aria-label="Telegram" target="_blank"><img src="img/telegram.svg" alt="Telegram" class="footer-icon"></a>
+            <a href="https://instagram.com/sea_tori" aria-label="Instagram" target="_blank"><img src="img/instagram.svg" alt="Instagram" class="footer-icon"></a>
+            <a href="https://vk.com/sea_tori" aria-label="VK" target="_blank"><img src="img/vk.svg" alt="VK" class="footer-icon"></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2024 Sea Tori. Все права защищены.</span>
+        <span>Сделано с любовью к Японии <span style='font-size:1.1em;'>⛩️</span></span>
+      </div>
+    </div>
+  </footer>
+  <div id="toast" class="toast"></div>
+  <script src="js/script.js"></script>
+  <script>
+    if (!localStorage.getItem('currentUser')) window.location.href = 'login.html';
+  </script>
+  <script src="js/db.js"></script>
+  <script>
+  // Если нет DB, реализуем getCart/setCart
+  if (!window.DB) {
+    function getCart() {
+      try {
+        return JSON.parse(localStorage.getItem('cart') || '[]');
+      } catch (e) { return []; }
+    }
+    function setCart(cart) {
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+    window.getCart = getCart;
+    window.setCart = setCart;
+  } else {
+    window.getCart = () => DB.getCart();
+    window.setCart = (cart) => DB.setCart(cart);
+  }
+  function showToast(msg) {
+    let toast = document.getElementById('toast');
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2200);
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.menu-item-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const card = this.closest('.menu-item-card');
+        const name = card.querySelector('.menu-item-title').textContent;
+        const price = parseInt(card.querySelector('.menu-item-price').textContent);
+        const desc = card.querySelector('.menu-item-desc').textContent;
+        const img = card.querySelector('.menu-item-img')?.getAttribute('src') || '';
+        // id генерируем по имени и цене
+        const id = name + '_' + price;
+        let cart = getCart();
+        const idx = cart.findIndex(i => i.id === id);
+        if (idx > -1) {
+          cart[idx].count = (cart[idx].count || 1) + 1;
+        } else {
+          cart.push({ id, name, price, desc, img, count: 1 });
+        }
+        setCart(cart);
+        // Анимация кнопки
+        this.classList.add('added');
+        this.textContent = 'Добавлено!';
+        setTimeout(() => {
+          this.classList.remove('added');
+          this.textContent = 'В корзину';
+        }, 1200);
+        showToast('Добавлено в корзину!');
+      });
+    });
+    // Выбор доставки
+    const deliveryBtns = document.querySelectorAll('.delivery-btn');
+    let selectedDelivery = localStorage.getItem('delivery') ? JSON.parse(localStorage.getItem('delivery')) : null;
+    function updateDeliveryUI() {
+      deliveryBtns.forEach(btn => {
+        const card = btn.closest('.menu-item-card');
+        const name = card.getAttribute('data-delivery-name');
+        if (selectedDelivery && selectedDelivery.name === name) {
+          btn.classList.add('added');
+          btn.textContent = 'Выбрано';
+        } else {
+          btn.classList.remove('added');
+          btn.textContent = 'Выбрать';
+        }
+      });
+    }
+    deliveryBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const card = this.closest('.menu-item-card');
+        const name = card.getAttribute('data-delivery-name');
+        const price = parseInt(card.getAttribute('data-delivery-price'));
+        selectedDelivery = { name, price };
+        localStorage.setItem('delivery', JSON.stringify(selectedDelivery));
+        updateDeliveryUI();
+      });
+    });
+    updateDeliveryUI();
+  });
+  </script>
+  <script>
+    // Категории для статических карточек
+    document.addEventListener('DOMContentLoaded', function() {
+      const catBtns = document.querySelectorAll('.category-btn');
+      const cards = document.querySelectorAll('.menu-item-card');
+      catBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          catBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          const cat = this.dataset.category;
+          cards.forEach(card => {
+            if (cat === 'all' || card.dataset.cat === cat) {
+              card.style.display = '';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>

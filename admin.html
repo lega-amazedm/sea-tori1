@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Админка — Sea Tori</title>
+<link rel="stylesheet" href="css/style.css" />
+<style>
+.admin-tabs { display: flex; gap: 18px; justify-content: center; margin-bottom: 32px; }
+.admin-tab-btn { background: #fff; color: #4bb6e6; border: 1.5px solid #4bb6e6; border-radius: 8px; font-size: 17px; font-weight: 600; padding: 8px 22px; transition: background 0.2s, color 0.2s; cursor: pointer; }
+.admin-tab-btn.active, .admin-tab-btn:hover { background: #4bb6e6; color: #fff; }
+.admin-table { width: 100%; border-collapse: collapse; margin-bottom: 32px; }
+.admin-table th, .admin-table td { border: 1px solid #e0e0e0; padding: 8px 6px; font-size: 15px; }
+.admin-table th { background: #f7fafd; color: #222; font-weight: 700; }
+@media (max-width: 600px) { .admin-table th, .admin-table td { font-size: 12px; padding: 4px 2px; } }
+.admin-menu-cats-scroll {
+  display: flex;
+  gap: 10px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  margin-bottom: 18px;
+  scrollbar-width: thin;
+}
+.admin-menu-cats-scroll button {
+  min-width: 110px;
+  font-size: 1.08em;
+  padding: 12px 10px;
+  border-radius: 14px;
+  border: none;
+  background: #23272f;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 2px 8px #0002;
+  transition: background 0.18s, color 0.18s;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.admin-menu-cats-scroll button.active {
+  background: #ffb347;
+  color: #23272f;
+}
+@media (max-width: 700px) {
+  .admin-menu-cats-scroll {
+    gap: 6px;
+    padding-bottom: 2px;
+  }
+  .admin-menu-cats-scroll button {
+    min-width: 90px;
+    font-size: 1em;
+    padding: 10px 4px;
+    border-radius: 10px;
+  }
+  #admin-menu-cards > div {
+    width: 98vw !important;
+    min-width: 0 !important;
+    max-width: 99vw !important;
+    padding: 10px 2vw !important;
+  }
+}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="container">
+    <div class="logo">Sea Tori</div>
+    <nav class="nav" id="main-nav">
+      <a href="menu.html">Меню</a>
+      <a href="cart.html">Корзина</a>
+      <a href="profile.html" id="profile-link">Профиль</a>
+    </nav>
+    <div class="burger" id="burger-menu">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</header>
+<main class="main">
+  <h2 class="page-title">Админка</h2>
+  <div class="admin-actions btn-center" style="margin-bottom:24px;">
+    <button class="btn btn-secondary" id="reset-db-btn">Сбросить базу</button>
+    <button class="btn btn-secondary" id="export-db-btn">Экспортировать базу</button>
+    <label class="btn btn-secondary" style="display:inline-block;cursor:pointer;">
+      Импортировать базу
+      <input type="file" id="import-db-input" accept="application/json" style="display:none;">
+    </label>
+  </div>
+  <div class="admin-tabs">
+    <button class="admin-tab-btn active" data-tab="orders">Заказы</button>
+    <button class="admin-tab-btn" data-tab="users">Пользователи</button>
+    <button class="admin-tab-btn" data-tab="menu">Меню</button>
+    <button class="admin-tab-btn" data-tab="revenue">Выручка</button>
+  </div>
+  <div class="admin-content" id="admin-orders">
+    <table class="admin-table" id="orders-table">
+      <tr>
+        <th>Дата</th>
+        <th>Имя</th>
+        <th>Телефон</th>
+        <th>Адрес</th>
+        <th>Позиции</th>
+        <th>Итого</th>
+        <th>Оплата</th>
+        <th>Статус</th>
+        <th>Действие</th>
+      </tr>
+    </table>
+    <div id="orders-summary" style="font-weight:600;font-size:1.1em;margin:12px 0 0 0;"></div>
+  </div>
+  <div class="admin-content" id="admin-users" style="display:none;">
+    <table class="admin-table" id="users-table">
+      <tr>
+        <th>Логин/Телефон</th>
+        <th>Роль</th>
+        <th>Действие</th>
+      </tr>
+    </table>
+  </div>
+  <div class="admin-content" id="admin-menu" style="display:none;">
+    <h3 style="text-align:center;margin-bottom:18px;font-size:1.5em;">Меню ресторана</h3>
+    <div style="display:flex;gap:32px;align-items:flex-start;justify-content:center;">
+      <div id="admin-menu-cats" style="min-width:180px;background:#f7fafd;border-radius:14px;padding:18px 10px;box-shadow:0 2px 10px #0001;display:flex;flex-direction:column;gap:10px;">
+        <div style="font-weight:700;font-size:1.1em;margin-bottom:8px;">Категории</div>
+        <div id="admin-cats-list"></div>
+        <button id="add-cat-btn" class="btn btn-secondary" style="margin-top:10px;">+ Добавить категорию</button>
+      </div>
+      <div style="flex:1;min-width:320px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <div id="current-cat-title" style="font-size:1.2em;font-weight:700;"></div>
+          <button id="add-menu-item-btn" class="btn btn-primary">+ Добавить блюдо</button>
+        </div>
+        <div id="admin-menu-cards" style="display:flex;flex-wrap:wrap;gap:22px;justify-content:flex-start;"></div>
+        <div id="menu-empty" style="color:#bbb;text-align:center;margin:28px 0;display:none;font-size:1.15em;">В этой категории пока нет блюд</div>
+      </div>
+    </div>
+    <iframe id="menu-import-iframe" src="menu.html" style="display:none;"></iframe>
+  </div>
+  <div class="admin-content" id="admin-revenue" style="display:none;">
+    <div style="margin-bottom:18px;">
+      <label for="revenue-period">Период:</label>
+      <select id="revenue-period">
+        <option value="day">День</option>
+        <option value="month">Месяц</option>
+      </select>
+      <input type="date" id="revenue-date" style="margin-left:8px;">
+    </div>
+    <div id="revenue-summary" style="font-size:1.2em;font-weight:600;"></div>
+    <div id="revenue-orders-list" style="margin-top:18px;"></div>
+  </div>
+</main>
+<footer class="footer new-footer">
+  <div class="container">
+    <div class="footer-main">
+      <div class="footer-logo-block">
+        <div class="footer-logo">Sea Tori <span style='font-size:1.3em;'>🍣</span></div>
+        <div class="footer-desc">Кафе и суши-бар в японском стиле.<br>Свежие блюда, уютная атмосфера.</div>
+      </div>
+      <div class="footer-contacts-block">
+        <div class="footer-contacts-title">Контакты</div>
+        <div class="footer-contacts-list">
+          <span>+7 962 376 0505</span>
+          <span>seatori@mail.ru</span>
+          <span>г. Дербент, ул, эмиргамзаева 42б/1 </span>
+          <span>Пн-Вс: 11:00–23:00</span>
+        </div>
+      </div>
+      <div class="footer-socials-block">
+        <div class="footer-contacts-title">Мы в соцсетях</div>
+        <div class="footer-socials">
+          <a href="https://t.me/sea_tori" aria-label="Telegram" target="_blank"><img src="img/telegram.svg" alt="Telegram" class="footer-icon"></a>
+          <a href="https://instagram.com/sea_tori" aria-label="Instagram" target="_blank"><img src="img/instagram.svg" alt="Instagram" class="footer-icon"></a>
+          <a href="https://vk.com/sea_tori" aria-label="VK" target="_blank"><img src="img/vk.svg" alt="VK" class="footer-icon"></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2024 Sea Tori. Все права защищены.</span>
+      <span>Сделано с любовью к Японии <span style='font-size:1.1em;'>⛩️</span></span>
+    </div>
+  </div>
+</footer>
+<script>
+// --- LocalStorage helpers ---
+function getMenu() { try { return JSON.parse(localStorage.getItem('menu')||'[]'); } catch(e){ return []; } }
+function setMenu(menu) { localStorage.setItem('menu', JSON.stringify(menu)); }
+function getOrders() { try { return JSON.parse(localStorage.getItem('orders')||'[]'); } catch(e){ return []; } }
+function setOrders(orders) { localStorage.setItem('orders', JSON.stringify(orders)); }
+function getUsers() { try { return JSON.parse(localStorage.getItem('users')||'[]'); } catch(e){ return []; } }
+function setUsers(users) { localStorage.setItem('users', JSON.stringify(users)); }
+function resetDB() { localStorage.removeItem('menu'); localStorage.removeItem('orders'); localStorage.removeItem('users'); location.reload(); }
+function exportDB() {
+  const data = {
+    menu: getMenu(),
+    orders: getOrders(),
+    users: getUsers()
+  };
+  const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'sea_tori_db.json';
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(url), 1000);
+}
+function importDBFile(file) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data.menu) setMenu(data.menu);
+      if (data.orders) setOrders(data.orders);
+      if (data.users) setUsers(data.users);
+      location.reload();
+    } catch (e) { alert('Ошибка импорта!'); }
+  };
+  reader.readAsText(file);
+}
+// --- Категории и блюда ---
+function getCats() {
+  const menu = getMenu();
+  const cats = Array.from(new Set(menu.map(i=>i.cat)));
+  if (!cats.length) return ['sushi','rolls','sets','soups','snacks','drinks','desserts','delivery'];
+  return cats;
+}
+const catLabels = {
+  sushi: 'Суши', rolls: 'Роллы', sets: 'Сеты', soups: 'Супы', snacks: 'Закуски', drinks: 'Напитки', desserts: 'Десерты', delivery: 'Доставка'
+};
+let adminMenuCat = getCats()[0]||'sushi';
+function importMenuFromIframe() {
+  if (getMenu().length) return; // Уже импортировано
+  const iframe = document.getElementById('menu-import-iframe');
+  if (!iframe || !iframe.contentWindow || !iframe.contentDocument) return;
+  try {
+    const doc = iframe.contentDocument || iframe.contentWindow.document;
+    const cards = doc.querySelectorAll('.menu-item-card');
+    const menu = [];
+    cards.forEach(card => {
+      const name = card.querySelector('.menu-item-title')?.textContent?.trim() || '';
+      const cat = card.getAttribute('data-cat') || '';
+      const desc = card.querySelector('.menu-item-desc')?.textContent?.trim() || '';
+      const priceRaw = card.querySelector('.menu-item-price')?.textContent?.replace(/[^\d]/g,'') || '0';
+      const price = parseInt(priceRaw) || 0;
+      const img = card.querySelector('img')?.getAttribute('src') || '';
+      if (name && cat) menu.push({ id: name+'_'+price, name, cat, desc, price, img });
+    });
+    if (menu.length) {
+      setMenu(menu);
+      adminMenuCat = getCats()[0]||'sushi';
+      renderAdminMenuCats();
+      renderAdminMenuCards();
+    }
+  } catch(e) {}
+}
+function renderAdminMenuCats() {
+  const wrap = document.getElementById('admin-cats-list');
+  const cats = getCats();
+  wrap.innerHTML = '';
+  cats.forEach(cat => {
+    const div = document.createElement('div');
+    div.style = 'display:flex;align-items:center;gap:8px;margin-bottom:2px;';
+    const btn = document.createElement('button');
+    btn.textContent = catLabels[cat]||cat;
+    btn.className = 'btn btn-cat' + (adminMenuCat===cat?' active':'');
+    btn.style = 'flex:1;text-align:left;background:'+(adminMenuCat===cat?'#ffb347':'#fff')+';color:'+(adminMenuCat===cat?'#23272f':'#222')+';border-radius:8px;padding:7px 10px;font-weight:600;border:none;cursor:pointer;transition:background 0.18s;';
+    btn.onclick = () => { adminMenuCat = cat; renderAdminMenuCats(); renderAdminMenuCards(); };
+    div.appendChild(btn);
+    if (cat!=='delivery') {
+      const del = document.createElement('button');
+      del.textContent = '✕';
+      del.title = 'Удалить категорию';
+      del.style = 'background:none;border:none;color:#b80000;font-size:1.1em;cursor:pointer;';
+      del.onclick = () => {
+        if (confirm('Удалить категорию и все блюда в ней?')) {
+          let menu = getMenu().filter(i=>i.cat!==cat);
+          setMenu(menu);
+          const catsNow = getCats();
+          adminMenuCat = catsNow[0]||'sushi';
+          renderAdminMenuCats();
+          renderAdminMenuCards();
+        }
+      };
+      div.appendChild(del);
+    }
+    wrap.appendChild(div);
+  });
+}
+function renderAdminMenuCards() {
+  const menu = getMenu().filter(i=>!i._catOnly);
+  const cardsWrap = document.getElementById('admin-menu-cards');
+  const empty = document.getElementById('menu-empty');
+  const cat = adminMenuCat;
+  const filtered = menu.filter(i=>i.cat===cat);
+  document.getElementById('current-cat-title').textContent = catLabels[cat]||cat;
+  cardsWrap.innerHTML = '';
+  if (!filtered.length) {
+    empty.style.display = '';
+    return;
+  } else {
+    empty.style.display = 'none';
+  }
+  filtered.forEach((item, idx) => {
+    const card = document.createElement('div');
+    card.style = 'background:#fff;border-radius:18px;box-shadow:0 2px 16px #0001;padding:22px 16px;width:320px;display:flex;flex-direction:column;align-items:center;position:relative;transition:box-shadow 0.18s;';
+    card.onmouseover = () => card.style.boxShadow = '0 4px 24px #0002';
+    card.onmouseout = () => card.style.boxShadow = '0 2px 16px #0001';
+    card.innerHTML = `
+      <div style="width:100%;display:flex;justify-content:center;align-items:center;">
+        ${item.img ? `<img src="${item.img}" alt="${item.name}" style="width:80px;height:80px;object-fit:cover;border-radius:14px;">` : `<div style='font-size:2.2em;'>🍽️</div>`}
+      </div>
+      <input type="text" value="${item.name}" style="margin:14px 0 4px 0;width:100%;font-size:1.15em;font-weight:700;text-align:center;border-radius:8px;padding:6px 10px;" placeholder="Название блюда" />
+      <input type="text" value="${item.desc||''}" style="margin-bottom:8px;width:100%;font-size:1em;text-align:center;border-radius:8px;padding:6px 10px;" placeholder="Описание" />
+      <input type="number" value="${item.price}" style="margin-bottom:10px;width:90px;font-size:1.1em;text-align:center;border-radius:8px;padding:6px 10px;" placeholder="Цена" />
+      <div style="display:flex;gap:10px;justify-content:center;">
+        <button class="btn btn-primary">Сохранить</button>
+        <button class="btn btn-secondary">Удалить</button>
+      </div>
+    `;
+    const [nameInput, descInput, priceInput] = card.querySelectorAll('input');
+    card.querySelector('.btn-primary').onclick = function() {
+      item.name = nameInput.value.trim();
+      item.desc = descInput.value.trim();
+      item.price = parseInt(priceInput.value)||0;
+      let menuAll = getMenu();
+      menuAll[menuAll.findIndex(i=>i.id===item.id)] = item;
+      setMenu(menuAll);
+      renderAdminMenuCards();
+    };
+    card.querySelector('.btn-secondary').onclick = function() {
+      if (confirm('Удалить блюдо?')) {
+        let menuAll = getMenu();
+        menuAll.splice(menuAll.findIndex(i=>i.id===item.id),1);
+        setMenu(menuAll);
+        renderAdminMenuCards();
+      }
+    };
+    cardsWrap.appendChild(card);
+  });
+}
+document.getElementById('add-cat-btn').onclick = function() {
+  let cat = prompt('Введите название категории (напр. "Поке")');
+  if (!cat) return;
+  cat = cat.trim().toLowerCase().replace(/\s+/g,'_');
+  if (!cat) return;
+  if (getCats().includes(cat)) { alert('Такая категория уже есть!'); return; }
+  let menu = getMenu();
+  menu.push({id:'cat_'+cat+'_'+Date.now(), name:'', cat, desc:'', price:0, img:'', _catOnly:true});
+  setMenu(menu);
+  adminMenuCat = cat;
+  renderAdminMenuCats();
+  renderAdminMenuCards();
+};
+document.getElementById('add-menu-item-btn').onclick = function() {
+  const cat = adminMenuCat;
+  let menu = getMenu();
+  const newItem = { id: 'new_'+Date.now(), name: '', cat, desc: '', price: 0, img: '' };
+  menu.push(newItem);
+  setMenu(menu);
+  renderAdminMenuCards();
+};
+// --- Заказы ---
+function renderOrdersTable() {
+  const orders = getOrders();
+  const table = document.getElementById('orders-table');
+  while (table.rows.length > 1) table.deleteRow(1);
+  let today = new Date().toISOString().slice(0,10);
+  let todayCount = 0, todaySum = 0;
+  orders.forEach((order, idx) => {
+    const tr = table.insertRow(-1);
+    tr.insertCell(0).textContent = order.date ? order.date.replace('T',' ').slice(0,16) : '';
+    tr.insertCell(1).textContent = order.name;
+    tr.insertCell(2).textContent = order.phone;
+    tr.insertCell(3).textContent = order.address;
+    tr.insertCell(4).textContent = (order.items||[]).map(i=>`${i.name} x${i.count||1}`).join(', ');
+    tr.insertCell(5).textContent = order.total + ' ₽';
+    // Оплата — красивое название
+    let paymentText = order.payment;
+    if (paymentText === 'cash') paymentText = 'Наличные курьеру';
+    else if (paymentText === 'transfer') paymentText = 'Переводом курьеру';
+    tr.insertCell(6).textContent = paymentText;
+    // --- Статус заказа ---
+    const statusTd = tr.insertCell(7);
+    const statusSelect = document.createElement('select');
+    statusSelect.innerHTML = `<option value="Новый">Новый</option><option value="Выполнено">Выполнено</option>`;
+    statusSelect.value = order.status || 'Новый';
+    statusSelect.style = 'font-weight:700;padding:4px 10px;border-radius:8px;outline:none;'+
+      (statusSelect.value==='Новый' ? 'background:#d4f7d4;color:#1a7a1a;' : 'background:#ffd6d6;color:#b80000;');
+    statusSelect.onchange = function() {
+      order.status = statusSelect.value;
+      setOrders(orders);
+      statusSelect.style.background = (order.status==='Выполнено') ? '#ffd6d6' : '#d4f7d4';
+      statusSelect.style.color = (order.status==='Выполнено') ? '#b80000' : '#1a7a1a';
+      renderOrdersTable();
+      renderRevenue();
+    };
+    // Установить цвет при инициализации
+    statusSelect.style.background = (order.status==='Выполнено') ? '#ffd6d6' : '#d4f7d4';
+    statusSelect.style.color = (order.status==='Выполнено') ? '#b80000' : '#1a7a1a';
+    statusTd.appendChild(statusSelect);
+    // --- Кнопка удалить ---
+    const delBtn = document.createElement('button');
+    delBtn.textContent = 'Удалить';
+    delBtn.className = 'btn btn-secondary';
+    delBtn.onclick = function() {
+      if (confirm('Удалить заказ?')) {
+        orders.splice(idx,1);
+        setOrders(orders);
+        renderOrdersTable();
+        renderRevenue();
+      }
+    };
+    const td = tr.insertCell(8);
+    td.appendChild(delBtn);
+    if (order.date && order.date.slice(0,10) === today) {
+      todayCount++;
+      todaySum += order.total;
+    }
+  });
+  document.getElementById('orders-summary').textContent = `За сегодня: ${todayCount} заказов, выручка: ${todaySum} ₽`;
+}
+// --- Пользователи ---
+function renderUsersTable() {
+  const users = getUsers();
+  const table = document.getElementById('users-table');
+  while (table.rows.length > 1) table.deleteRow(1);
+  users.forEach((user, idx) => {
+    const tr = table.insertRow(-1);
+    tr.insertCell(0).textContent = user.login || user.phone || '';
+    tr.insertCell(1).textContent = user.role || 'user';
+    const delBtn = document.createElement('button');
+    delBtn.textContent = 'Удалить';
+    delBtn.className = 'btn btn-secondary';
+    delBtn.onclick = function() {
+      if (confirm('Удалить пользователя?')) {
+        users.splice(idx,1);
+        setUsers(users);
+        renderUsersTable();
+      }
+    };
+    tr.insertCell(2).appendChild(delBtn);
+  });
+}
+// --- Выручка ---
+function renderRevenue() {
+  const orders = getOrders();
+  const period = document.getElementById('revenue-period').value;
+  const date = document.getElementById('revenue-date').value;
+  let filtered = [];
+  if (period === 'day' && date) {
+    filtered = orders.filter(o => o.date && o.date.slice(0,10) === date);
+  } else if (period === 'month' && date) {
+    const ym = date.slice(0,7);
+    filtered = orders.filter(o => o.date && o.date.slice(0,7) === ym);
+  } else {
+    filtered = orders;
+  }
+  const sum = filtered.reduce((s,o)=>s+o.total,0);
+  const count = filtered.length;
+  document.getElementById('revenue-summary').textContent = `Выручка: ${sum} ₽, заказов: ${count}`;
+  let html = '';
+  filtered.forEach(o => {
+    html += `<div style="margin-bottom:8px;">${o.date ? o.date.replace('T',' ').slice(0,16) : ''} — ${o.name} — ${o.total} ₽</div>`;
+  });
+  document.getElementById('revenue-orders-list').innerHTML = html;
+}
+// --- Навигация и события ---
+document.addEventListener('DOMContentLoaded', function() {
+  // Tabs
+  document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+    btn.onclick = function() {
+      document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      document.querySelectorAll('.admin-content').forEach(c => c.style.display = 'none');
+      const tab = this.dataset.tab;
+      const content = document.getElementById('admin-' + tab);
+      if (content) content.style.display = '';
+      if (tab==='orders') renderOrdersTable();
+      if (tab==='users') renderUsersTable();
+      if (tab==='menu') { renderAdminMenuCats(); renderAdminMenuCards(); }
+      if (tab==='revenue') renderRevenue();
+    };
+  });
+  // DB actions
+  document.getElementById('reset-db-btn').onclick = resetDB;
+  document.getElementById('export-db-btn').onclick = exportDB;
+  document.getElementById('import-db-input').onchange = function(e) {
+    if (e.target.files[0]) importDBFile(e.target.files[0]);
+  };
+  // Меню
+  if (!getMenu().length) {
+    const iframe = document.getElementById('menu-import-iframe');
+    iframe.onload = function() {
+      setTimeout(importMenuFromIframe, 300);
+    };
+  }
+  renderAdminMenuCats();
+  renderAdminMenuCards();
+  // Выручка
+  document.getElementById('revenue-period').onchange = renderRevenue;
+  document.getElementById('revenue-date').onchange = renderRevenue;
+  // Первичная инициализация
+  renderOrdersTable();
+  renderUsersTable();
+  renderRevenue();
+});
+</script>
+</body>
+</html> 

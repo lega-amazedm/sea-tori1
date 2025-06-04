@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Оформление заказа — Sea Tori</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<header class="header">
+  <div class="container">
+    <div class="logo">Sea Tori</div>
+    <nav class="nav" id="main-nav">
+      <a href="index.html">Главная</a>
+      <a href="menu.html">Меню</a>
+      <a href="cart.html">Корзина</a>
+      <a href="profile.html" id="profile-link">Профиль</a>
+    </nav>
+    <div class="burger" id="burger-menu">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</header>
+<main class="main">
+  <h2 class="page-title">Оформление заказа</h2>
+  <form class="order-form" id="order-form">
+    <div class="form-group">
+      <label for="order-name">Имя</label>
+      <input type="text" id="order-name" name="name" required autocomplete="name">
+    </div>
+    <div class="form-group">
+      <label for="order-phone">Телефон</label>
+      <input type="tel" id="order-phone" name="phone" required autocomplete="tel">
+    </div>
+    <div class="form-group">
+      <label for="order-address">Адрес доставки</label>
+      <input type="text" id="order-address" name="address" required autocomplete="street-address">
+    </div>
+    <div class="form-group">
+      <label for="order-payment">Способ оплаты</label>
+      <select id="order-payment" name="payment" required>
+        <option value="cash">Наличные курьеру</option>
+        <option value="transfer">Переводом курьеру</option>
+      </select>
+    </div>
+    <div class="order-summary">
+      <span>Итого: <span id="order-total">0 ₽</span></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Подтвердить заказ</button>
+  </form>
+  <div id="order-error" style="color:#ff4b4b;text-align:center;margin-top:12px;min-height:22px;"></div>
+  <div id="order-success" class="order-success" style="display:none;">
+    <h3>Спасибо за заказ!</h3>
+    <p>Мы свяжемся с вами для подтверждения.</p>
+    <a href="menu.html" class="btn">Вернуться в меню</a>
+  </div>
+</main>
+<footer class="footer new-footer">
+  <div class="container">
+    <div class="footer-main">
+      <div class="footer-logo-block">
+        <div class="footer-logo">Sea Tori <span style='font-size:1.3em;'>🍣</span></div>
+        <div class="footer-desc">Кафе и суши-бар в японском стиле.<br>Свежие блюда, уютная атмосфера.</div>
+      </div>
+      <div class="footer-contacts-block">
+        <div class="footer-contacts-title">Контакты</div>
+        <div class="footer-contacts-list">
+          <span>+7 999 888 77 66</span>
+          <span>seatori@mail.ru</span>
+          <span>г. Москва, ул. Японская, 7</span>
+          <span>Пн-Вс: 11:00–23:00</span>
+        </div>
+      </div>
+      <div class="footer-socials-block">
+        <div class="footer-contacts-title">Мы в соцсетях</div>
+        <div class="footer-socials">
+          <a href="https://t.me/sea_tori" aria-label="Telegram" target="_blank"><img src="img/telegram.svg" alt="Telegram" class="footer-icon"></a>
+          <a href="https://instagram.com/sea_tori" aria-label="Instagram" target="_blank"><img src="img/instagram.svg" alt="Instagram" class="footer-icon"></a>
+          <a href="https://vk.com/sea_tori" aria-label="VK" target="_blank"><img src="img/vk.svg" alt="VK" class="footer-icon"></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2024 Sea Tori. Все права защищены.</span>
+      <span>Сделано с любовью к Японии <span style='font-size:1.1em;'>⛩️</span></span>
+    </div>
+  </div>
+</footer>
+<script>
+  if (!localStorage.getItem('currentUser')) window.location.href = 'login.html';
+
+  function getCart() {
+    try { return JSON.parse(localStorage.getItem('cart') || '[]'); } catch (e) { return []; }
+  }
+  function setCart(cart) { localStorage.setItem('cart', JSON.stringify(cart)); }
+  function getDelivery() {
+    try { return JSON.parse(localStorage.getItem('delivery') || 'null'); } catch (e) { return null; }
+  }
+  function renderOrderTotal() {
+    const cart = getCart();
+    const delivery = getDelivery();
+    let total = 0;
+    cart.forEach(item => { total += (item.price * (item.count || 1)); });
+    let deliveryText = '';
+    if (delivery) { total += delivery.price; deliveryText = ` + доставка: ${delivery.name} (${delivery.price} ₽)`; }
+    else { deliveryText = '<span style="color:#e64b4b;font-size:0.95em;"> (выберите доставку в меню)</span>'; }
+    document.getElementById('order-total').innerHTML = total + ' ₽' + deliveryText;
+  }
+  document.addEventListener('DOMContentLoaded', renderOrderTotal);
+
+  // Обработка формы заказа
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('order-form');
+    if (!form) return;
+    form.onsubmit = function(e) {
+      e.preventDefault();
+      const name = document.getElementById('order-name').value.trim();
+      const phone = document.getElementById('order-phone').value.trim();
+      const address = document.getElementById('order-address').value.trim();
+      const payment = document.getElementById('order-payment').value;
+      const cart = getCart();
+      const delivery = getDelivery();
+      if (!delivery) {
+        document.getElementById('order-error').textContent = 'Пожалуйста, выберите доставку в меню!';
+        return;
+      }
+      if (cart.length === 0) {
+        document.getElementById('order-error').textContent = 'Корзина пуста!';
+        return;
+      }
+      let total = cart.reduce((sum, item) => sum + item.price * (item.count || 1), 0) + delivery.price;
+      // Сохраняем заказ
+      const order = {
+        date: new Date().toISOString(),
+        name, phone, address, payment,
+        items: cart,
+        delivery,
+        total
+      };
+      let orders = [];
+      try { orders = JSON.parse(localStorage.getItem('orders') || '[]'); } catch (e) {}
+      orders.push(order);
+      localStorage.setItem('orders', JSON.stringify(orders));
+      setCart([]);
+      window.location.href = 'thankyou.html';
+    };
+  });
+</script>
+<script src="js/db.js"></script>
+<script src="js/order.js"></script>
+<script>
+  window.showThankYou = function() {
+    window.location.href = 'thankyou.html';
+  }
+</script>
+</body>
+</html>
